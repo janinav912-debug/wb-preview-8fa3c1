@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- keep this out of search results: the URL is public, the page is not advertised -->
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#292F58">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Weil Baseline — Player Development Platform">
+<meta property="og:description" content="Every hour, every session, every point of improvement — in one place.">
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Weil Baseline — Player Development Platform</title>
+<style>
+/* ============================================================
+   BRAND LAYER  ·  swap these five values for the academy's real
+   hexes and the whole interface re-skins. Nothing else changes.
+   ============================================================ */
+:root{
+  --brand:      #292F58;   /* Weil navy, sampled from the supplied logo */
+  --brand-2:    #3A4276;   /* lighter steps of the same hue, for gradients */
+  --brand-3:    #4E5794;
+  --gold:       #F2A900;   /* accent — mine, not theirs. Change here to drop it. */
+  --gold-2:     #FFC845;
+  --gold-soft:  #FFF4DA;
+}
+
+:root{
+  color-scheme: light;
+  --surface-1:#ffffff; --page:#eef1f5; --surface-2:#f7f9fc;
+  --text-primary:#0d1b2a; --text-secondary:#3d4a58; --muted:#6b7885;
+  --grid:#dbe2ea; --baseline:#b3bfcc; --border:#d3dce6; --border-strong:#b9c6d4;
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a; --series-4:#eda100; --series-5:#e87ba4;
+  --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --success-text:#006300; --success-bg:#00631a;
+  --wash:rgba(11,42,74,0.05);
+  --accent-soft:#dfe3f5;
+  --shadow:0 1px 2px rgba(13,27,42,.06), 0 3px 10px rgba(13,27,42,.05);
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#141a21; --page:#0a0e13; --surface-2:#1b232c;
+  --text-primary:#ffffff; --text-secondary:#c8d2dd; --muted:#8b98a6;
+  --grid:#2a343f; --baseline:#3c4854; --border:#2e3a46; --border-strong:#465464;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500; --series-5:#d55181;
+  --success-text:#0ca30c; --success-bg:#0a7a24;
+  --wash:rgba(255,255,255,0.07);
+  --accent-soft:#3A4276;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page); color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14.5px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:22px 20px 70px}
+
+/* ---------- top bar ---------- */
+header.top{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(100deg,var(--brand) 0%,var(--brand-2) 62%,var(--brand-3) 100%);
+  border-bottom:3px solid var(--gold);
+}
+.top-inner{max-width:1200px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+.brand .mono{
+  width:40px;height:40px;border-radius:11px;background:var(--gold);color:var(--brand);
+  display:grid;place-items:center;font-size:22px;font-weight:800;flex:0 0 auto;letter-spacing:-.03em;
+}
+.brand h1{font-size:19px;margin:0;letter-spacing:-0.025em;font-weight:700;color:#fff;line-height:1.1}
+.brand .motto{margin:3px 0 0;font-size:8.5px;font-weight:750;letter-spacing:.2em;color:var(--gold-2)}
+.ctrls{display:flex;gap:10px;align-items:center}
+.roles{display:flex;gap:3px;background:rgba(255,255,255,.13);padding:3px;border-radius:11px}
+.roles button{
+  border:0;background:transparent;color:rgba(255,255,255,.82);
+  font:inherit;font-size:13px;font-weight:650;padding:7px 15px;border-radius:8px;cursor:pointer;
+}
+.roles button:hover{color:#fff;background:rgba(255,255,255,.10)}
+.roles button[aria-pressed="true"]{background:var(--gold);color:var(--brand);box-shadow:0 1px 3px rgba(0,0,0,.22)}
+.icon-btn{
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.10);color:#fff;
+  width:36px;height:36px;border-radius:10px;cursor:pointer;display:grid;place-items:center;
+}
+.icon-btn:hover{background:rgba(255,255,255,.2)}
+@media(max-width:600px){ .roles button{padding:7px 11px;font-size:12.5px} .brand h1{font-size:17px} }
+
+/* ---------- role banner ---------- */
+.rolebar{background:var(--surface-1);border-bottom:1px solid var(--border)}
+.rolebar-inner{max-width:1200px;margin:0 auto;padding:10px 20px;font-size:12.5px;color:var(--text-secondary);
+  display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:0 0 auto;box-shadow:0 0 0 3px rgba(242,169,0,.22)}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--surface-1);border:1px solid var(--border);border-radius:15px;
+  padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);
+}
+.card > h2{
+  font-size:12.5px;margin:0 0 3px;letter-spacing:0.085em;text-transform:uppercase;
+  color:var(--text-primary);font-weight:750;
+}
+.card > h2 .accentbar{display:inline-block;width:15px;height:3px;background:var(--gold);
+  border-radius:2px;vertical-align:middle;margin-right:8px;position:relative;top:-1px}
+.card > .sub{font-size:12.5px;color:var(--muted);margin:0 0 15px}
+.grid{display:grid;gap:16px}
+@media(min-width:880px){
+  .g-2{grid-template-columns:1fr 1fr}
+  .g-58{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .g-73{grid-template-columns:minmax(0,7fr) minmax(0,4fr)}
+}
+
+/* ---------- player hero ---------- */
+.hero-card{
+  background:linear-gradient(115deg,var(--brand) 0%,var(--brand-2) 55%,var(--brand-3) 100%);
+  border:0;color:#fff;padding:22px 24px;
+}
+.phead{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.avatar{
+  width:64px;height:64px;border-radius:18px;display:grid;place-items:center;
+  background:var(--gold);color:var(--brand);font-size:23px;font-weight:750;flex:0 0 auto;
+}
+.phead .who h3{margin:0;font-size:25px;letter-spacing:-0.03em;color:#fff;font-weight:700}
+.phead .who p{margin:4px 0 0;font-size:13.5px;color:rgba(255,255,255,.86);display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.hero-num{margin-left:auto;text-align:right}
+.hero-num .label{font-size:10.5px;color:var(--gold-2);text-transform:uppercase;letter-spacing:0.12em;font-weight:750}
+.hero-num .val{font-size:46px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#fff}
+
+/* ---------- delta chips ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:750;
+  padding:3px 9px;border-radius:7px;white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+.chip.up{background:var(--success-bg);color:#fff}
+.chip.flat{background:var(--wash);color:var(--muted)}
+.chip.down{background:var(--critical);color:#fff}
+.chip.gold{background:var(--gold);color:var(--brand)}
+.hero-card .chip.flat{background:rgba(255,255,255,.2);color:#fff}
+
+/* ---------- TIME INVESTED band ---------- */
+.time-band{
+  background:linear-gradient(120deg,var(--brand) 0%,var(--brand-2) 100%);
+  border-radius:15px;padding:22px 24px;margin-bottom:16px;color:#fff;box-shadow:var(--shadow);
+}
+.time-band .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-2);font-weight:750;margin:0 0 3px}
+.time-band .headline{font-size:15.5px;margin:0 0 18px;color:rgba(255,255,255,.92);line-height:1.45}
+.time-band .headline b{color:var(--gold-2);font-size:19px;font-weight:750;letter-spacing:-.02em}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+@media(min-width:700px){.tgrid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.tgrid{grid-template-columns:repeat(6,1fr)}}
+.ttile{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.17);border-radius:12px;padding:13px 14px}
+.ttile .v{font-size:29px;font-weight:750;letter-spacing:-.035em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.ttile .v small{font-size:14px;font-weight:650;color:rgba(255,255,255,.65);letter-spacing:0}
+.ttile .t{font-size:11px;color:rgba(255,255,255,.80);margin-top:6px;line-height:1.3;font-weight:550}
+.ttile .d{margin-top:8px}
+.ttile .chip.up{background:var(--gold);color:var(--brand)}
+.ttile .chip.flat{background:rgba(255,255,255,.18);color:rgba(255,255,255,.9)}
+
+/* ---------- stat tiles (light) ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:11px}
+.tile{border:1px solid var(--border);border-radius:12px;padding:13px 15px;background:var(--surface-2)}
+.tile .t{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;font-weight:700}
+.tile .v{font-size:26px;font-weight:730;letter-spacing:-0.03em;line-height:1.1;color:var(--brand)}
+:root[data-theme="dark"] .tile .v{color:#dfe3f5}
+.tile .v small{font-size:14px;color:var(--muted);font-weight:600}
+.tile .n{font-size:11.5px;color:var(--text-secondary);margin-top:5px}
+
+/* ---------- gains strip ---------- */
+.gains{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
+.gain{
+  border:1.5px solid var(--success-bg);border-radius:11px;padding:9px 13px;background:var(--surface-1);
+  display:flex;flex-direction:column;gap:2px;
+}
+.gain .g-v{font-size:23px;font-weight:750;color:var(--success-text);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gain .g-l{font-size:11px;color:var(--text-secondary);font-weight:600}
+
+/* ---------- badges ---------- */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+  padding:3.5px 10px;border-radius:999px;white-space:nowrap;
+  background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-primary);
+}
+.hero-card .badge{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3);color:#fff}
+.badge .bd{width:8px;height:8px;border-radius:50%}
+.b-good .bd{background:var(--good)} .b-warning .bd{background:var(--warning)}
+.b-serious .bd{background:var(--serious)} .b-critical .bd{background:var(--critical)}
+
+/* ---------- charts ---------- */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text{fill:var(--text-secondary);font-size:11px;font-variant-numeric:tabular-nums;font-weight:500}
+.gridline{stroke:var(--grid);stroke-width:1}
+.axisline{stroke:var(--baseline);stroke-width:1.5}
+.tip{
+  position:absolute;pointer-events:none;opacity:0;transition:opacity .09s;
+  background:var(--brand);color:#fff;border-radius:9px;
+  padding:8px 12px;font-size:12.5px;box-shadow:0 5px 18px rgba(0,0,0,.28);z-index:20;white-space:nowrap;
+}
+.tip b{font-size:14px;color:var(--gold-2)}
+.legend{display:flex;gap:15px;flex-wrap:wrap;margin:0 0 13px;font-size:12.5px;color:var(--text-secondary);font-weight:550}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.swatch{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+
+/* stacked hours bar */
+.stack{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px;margin-bottom:14px}
+.stack div{display:grid;place-items:center;font-size:11.5px;font-weight:750;color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);min-width:0;overflow:hidden}
+
+/* ---------- skill rows ---------- */
+.skill{margin-bottom:14px}
+.skill .lab{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center;gap:8px}
+.skill .lab .nm{font-weight:600}
+.skill .lab b{font-variant-numeric:tabular-nums;font-weight:750;font-size:14px}
+.track{position:relative;height:21px}
+.track .bar{position:absolute;height:8px;border-radius:4px}
+.track .b1{top:0;background:var(--series-1)}
+.track .b2{top:11px;background:var(--series-2)}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);
+  font-weight:750;padding:0 10px 10px;border-bottom:2px solid var(--border-strong);white-space:nowrap;
+}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover{background:var(--wash)}
+.tname{display:flex;align-items:center;gap:10px}
+.mini{width:30px;height:30px;border-radius:9px;background:var(--brand);color:var(--gold);
+  display:grid;place-items:center;font-size:11.5px;font-weight:750;flex:0 0 auto}
+.tname .sub{font-size:11.5px;color:var(--muted)}
+.scroll{overflow-x:auto}
+.mini-table{font-size:12.5px}
+.mini-table td{padding:7px 10px}
+
+/* ---------- notes & thread ---------- */
+.note{border-left:3px solid var(--gold);padding:2px 0 2px 14px;margin-bottom:16px}
+.note .meta{font-size:11.5px;color:var(--muted);margin-bottom:3px;font-weight:600}
+.note p{margin:0;font-size:14px;color:var(--text-secondary)}
+.msg{display:flex;gap:12px;margin-bottom:16px}
+.msg .mini{width:34px;height:34px;font-size:12.5px}
+.msg.parent .mini{background:var(--series-2);color:#fff}
+.msg.student .mini{background:var(--series-3);color:#fff}
+.msg .body{flex:1;min-width:0}
+.msg .meta{font-size:11.5px;color:var(--muted);margin-bottom:2px}
+.msg .meta b{color:var(--text-primary);font-size:13px}
+.msg p{margin:0;font-size:14px;color:var(--text-secondary);white-space:pre-wrap}
+.composer{display:flex;gap:10px;margin-top:8px}
+textarea,input[type=text],select{
+  font:inherit;background:var(--surface-1);color:var(--text-primary);
+  border:1.5px solid var(--border-strong);border-radius:10px;padding:10px 12px;width:100%;resize:vertical;
+}
+textarea:focus,input:focus,select:focus{outline:2.5px solid var(--gold);outline-offset:-1px;border-color:var(--gold)}
+.btn{
+  border:0;background:var(--brand);color:#fff;font:inherit;font-weight:700;font-size:13.5px;
+  padding:10px 19px;border-radius:10px;cursor:pointer;white-space:nowrap;
+}
+.btn:hover{background:var(--brand-2)}
+.btn.gold{background:var(--gold);color:var(--brand)}
+.btn.gold:hover{background:var(--gold-2)}
+.btn.ghost{background:transparent;color:var(--text-primary);border:1.5px solid var(--border-strong)}
+.btn.ghost:hover{background:var(--wash)}
+
+/* ---------- goals ---------- */
+.goal{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--border)}
+.goal:last-child{border-bottom:0}
+.goal .g-body{flex:1;min-width:0}
+.goal h4{margin:0 0 3px;font-size:14px;font-weight:700;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.goal p{margin:0;font-size:13px;color:var(--text-secondary)}
+
+/* ---------- sliders ---------- */
+.slider-row{display:grid;grid-template-columns:98px 1fr 36px;gap:12px;align-items:center;margin-bottom:12px}
+.slider-row label{font-size:13px;color:var(--text-secondary);font-weight:600}
+.slider-row output{font-size:14px;font-weight:750;text-align:right;font-variant-numeric:tabular-nums;color:var(--brand)}
+:root[data-theme="dark"] .slider-row output{color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--brand)}
+:root[data-theme="dark"] input[type=range]{accent-color:var(--gold)}
+
+.callout{
+  background:var(--gold-soft);border-left:3px solid var(--gold);border-radius:0 11px 11px 0;
+  padding:14px 16px;font-size:14px;color:var(--text-primary);margin-bottom:15px;font-weight:500;
+}
+:root[data-theme="dark"] .callout{background:rgba(242,169,0,.13)}
+.pill-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.selwrap{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);
+  margin-bottom:15px;font-weight:600}
+.selwrap select{width:auto;min-width:220px;padding:8px 11px;font-size:13.5px}
+.foot{font-size:12px;color:var(--muted);text-align:center;padding-top:10px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand" id="brandSlot"></div>
+    <div class="ctrls">
+      <div class="roles" role="group" aria-label="Switch role">
+        <button data-role="parent" aria-pressed="true">Parent</button>
+        <button data-role="student" aria-pressed="false">Student</button>
+        <button data-role="coach" aria-pressed="false">Coach</button>
+        <button data-role="admin" aria-pressed="false">Director</button>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle light or dark mode">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 000 17z" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="rolebar"><div class="rolebar-inner"><span class="dot"></span><span id="rolebarText"></span></div></div>
+
+<div class="wrap">
+  <main id="view"></main>
+  <p class="foot">Weil Baseline · prototype · accent colour is a placeholder · all players, scores and messages are fictional sample data</p>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   LOGO SLOT
+   The Weil mark, keyed to transparent white and inlined as a data URI
+   so this file works offline. Replace the string to swap the logo;
+   set it to null to fall back to a plain monogram. LOGO_H is the
+   rendered height in pixels.
+   ============================================================ */
+const LOGO_SRC = "data:image/png;base64,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";
+const LOGO_H   = 44;
+const PRODUCT  = "Weil Baseline";
+const MOTTO    = "PLAY AMAZING";
+
+function brandMark(){
+  const words = `<div><h1>${PRODUCT}</h1><p class="motto">${MOTTO}</p></div>`;
+  if(LOGO_SRC){
+    // falls back to the monogram if the logo can't load (offline, moved asset)
+    return `<img src="${LOGO_SRC}" alt="Weil Tennis Academy" style="height:${LOGO_H}px;width:auto;display:block"
+              onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'mono',textContent:'W'}))">${words}`;
+  }
+  return `<div class="mono" aria-hidden="true">W</div>${words}`;
+}
+
+const MONTHS=["Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"];
+const SKILLS=["Serve","Forehand","Backhand","Return","Net play","Movement"];
+
+/* where a year's training hours go, and how they're coloured */
+const BUCKETS=[
+  {k:"group",   label:"Group training",       c:"var(--series-1)"},
+  {k:"private", label:"1-on-1 with coach",    c:"var(--series-2)"},
+  {k:"match",   label:"Match play",           c:"var(--series-3)"},
+  {k:"fitness", label:"Strength & conditioning", c:"var(--series-4)"},
+  {k:"video",   label:"Video & mental",       c:"var(--series-5)"}
+];
+/* seasonal shape of training hours across the year (sums to 1) */
+const SEASON=[.075,.085,.080,.060,.085,.085,.090,.085,.080,.090,.095,.090];
+
+const PLAYERS=[
+  { id:"lf", first:"Lucas", last:"Fernandes", grade:11, country:"Brazil", flag:"BRA", coach:"Mohamed B.",
+    utr:[10.1,10.2,10.4,10.4,10.7,10.9,11.0,11.3,11.4,11.6,11.7,11.8],
+    skillsStart:[6.0,7.0,5.5,6.0,4.5,6.5], skillsNow:[7.5,8.5,6.5,7.5,6.0,8.0],
+    wins:31, losses:12, vsHigher:7, hours:612, sessions:155, scheduled:160,
+    mix:[.44,.15,.19,.16,.06], tournaments:11, videoSessions:26,
+    prev:{hours:548, sessions:143, tournaments:8, matches:36},
+    gpa:3.4, fitness:82, fitnessStart:68, mental:76, status:"good", statusLabel:"On track",
+    focus:"Second-serve depth and holding the baseline against heavy topspin.",
+    goals:[
+      {t:"Reach UTR 12.0 by December", p:82, n:"11.8 now · +1.7 this year"},
+      {t:"Second-serve win rate above 50%", p:64, n:"46% over last 10 matches"},
+      {t:"SAT 1250+ for target academic tier", p:40, n:"1180 on the June practice test"}],
+    notes:[
+      {d:"Aug 17", by:"Mohamed Badran", t:"Best week of the summer. Second serve is finally a weapon rather than a liability — he held four break points in the Ventura final using kick out wide. Movement laterally still lags when he's tired late in the third."},
+      {d:"Aug 10", by:"Mohamed Badran", t:"Heavy fitness block. Deliberately kept technical work light. Attitude in the 6am sessions has been excellent and the younger group notices it."},
+      {d:"Aug 3", by:"Ana Ruiz (fitness)", t:"Sprint 5-10-5 down to 4.41s from 4.68 in January. Endurance still the limiter — we're adding a third conditioning block."}],
+    events:[{d:"Sep 6",t:"ITF J300 Claremont",n:"Main draw"},{d:"Sep 20",t:"SoCal Sectionals",n:"Seeded 4"},{d:"Oct 4",t:"College showcase — Stanford",n:"Confirmed"}],
+    thread:[
+      {who:"coach",n:"Mohamed Badran",r:"Head Coach",d:"Mon 4:12pm",t:"Lucas had a real breakthrough on the kick serve this week. I've attached it to the weekly clip. We'll keep the fitness load high through September and then taper for the ITF."},
+      {who:"parent",n:"Beatriz Fernandes",r:"Parent",d:"Mon 9:40pm",t:"Thank you Mohamed. He mentioned his shoulder felt tight on Sunday — is that being monitored?"},
+      {who:"coach",n:"Ana Ruiz",r:"Fitness Director",d:"Tue 7:05am",t:"Yes — flagged it Sunday evening. Normal load response, not an injury. He's on the band protocol before each session and we'll reassess Friday."},
+      {who:"student",n:"Lucas",r:"Player",d:"Tue 6:30pm",t:"Shoulder feels fine today. Served 40 mins with no issue."}]},
+
+  { id:"ms", first:"Mika", last:"Sundqvist", grade:12, country:"Finland", flag:"FIN", coach:"Mark W.",
+    utr:[11.6,11.7,11.8,11.9,12.0,12.0,12.1,12.2,12.3,12.3,12.4,12.4],
+    skillsStart:[7.5,7.5,7.0,7.5,6.5,7.5], skillsNow:[8.5,8.5,8.0,8.5,7.5,8.5],
+    wins:38, losses:9, vsHigher:11, hours:648, sessions:157, scheduled:160,
+    mix:[.40,.18,.22,.14,.06], tournaments:13, videoSessions:31,
+    prev:{hours:621, sessions:153, tournaments:12, matches:44},
+    gpa:3.8, fitness:88, fitnessStart:80, mental:85, status:"good", statusLabel:"Committed",
+    focus:"Match sharpening ahead of the fall season. Verbal commitment signed in July.",
+    goals:[{t:"Sign NLI in November",p:95,n:"Verbal accepted · paperwork pending"},
+           {t:"Hold UTR above 12.0 through signing",p:100,n:"12.4 — comfortably clear"},
+           {t:"Mentor two junior players weekly",p:70,n:"7 of 10 sessions logged"}],
+    notes:[{d:"Aug 16",by:"Mark Weil",t:"Signed verbal in July. Focus now shifts entirely to arriving in shape and not coasting. Has taken the mentoring role with the 8th graders seriously, which is exactly what I hoped for."}],
+    events:[{d:"Sep 13",t:"ITF J200 Costa Mesa",n:"Main draw"},{d:"Nov 12",t:"NLI signing day",n:"On campus"}],
+    thread:[{who:"coach",n:"Mark Weil",r:"Academy Director",d:"Fri 3:20pm",t:"Everything is in order for November. I'll send the signing-day logistics next week."}]},
+
+  { id:"sr", first:"Sofia", last:"Reyes", grade:10, country:"Mexico", flag:"MEX", coach:"Mohamed B.",
+    utr:[8.2,8.3,8.6,8.7,8.9,9.1,9.1,9.3,9.4,9.5,9.6,9.6],
+    skillsStart:[5.0,6.5,5.5,5.5,4.0,6.0], skillsNow:[6.5,8.0,7.0,7.0,5.5,7.5],
+    wins:27, losses:15, vsHigher:9, hours:598, sessions:149, scheduled:160,
+    mix:[.47,.13,.18,.16,.06], tournaments:10, videoSessions:22,
+    prev:{hours:503, sessions:131, tournaments:6, matches:31},
+    gpa:3.9, fitness:79, fitnessStart:63, mental:81, status:"good", statusLabel:"Rising fast",
+    focus:"Net play — the single biggest gap between her and the next tier.",
+    goals:[{t:"UTR 10.0 by winter break",p:78,n:"9.6 now · +1.4 this year"},
+           {t:"Approach and finish 5 points per match",p:55,n:"Averaging 2.8"},
+           {t:"Perfect academic term",p:90,n:"3.9 GPA"}],
+    notes:[{d:"Aug 15",by:"Mohamed Badran",t:"Fastest improver in the academy this year. Groundstrokes are now genuinely college-level for her age. She loses points she should win by refusing to come forward — that's a confidence problem more than a technique one."}],
+    events:[{d:"Sep 6",t:"ITF J300 Claremont",n:"Qualifying"}],
+    thread:[{who:"parent",n:"Carmen Reyes",r:"Parent",d:"Sun 8:15pm",t:"We are so pleased with her progress. Is there anything we can do over the winter break to help?"},
+            {who:"coach",n:"Mohamed Badran",r:"Head Coach",d:"Mon 7:50am",t:"Court time with a hitting partner who forces her forward. I'll send three specific drills before she flies home."}]},
+
+  { id:"jp", first:"Jae-won", last:"Park", grade:11, country:"South Korea", flag:"KOR", coach:"Mohamed B.",
+    utr:[10.8,10.9,11.0,10.9,10.9,10.8,10.9,10.9,10.8,10.9,10.9,10.9],
+    skillsStart:[7.0,7.5,6.5,7.0,5.5,7.0], skillsNow:[7.5,7.5,7.0,7.0,6.0,7.0],
+    wins:19, losses:21, vsHigher:3, hours:521, sessions:128, scheduled:160,
+    mix:[.52,.09,.15,.17,.07], tournaments:7, videoSessions:11,
+    prev:{hours:594, sessions:155, tournaments:11, matches:47},
+    gpa:3.1, fitness:71, fitnessStart:74, mental:58, status:"critical", statusLabel:"Needs attention",
+    focus:"Plateaued for nine months. Attendance and competitive intensity both slipping.",
+    goals:[{t:"Break the UTR 11.0 plateau",p:15,n:"Flat since November"},
+           {t:"Attendance above 95%",p:52,n:"80% over the last 8 weeks"},
+           {t:"Complete mental-fitness block",p:30,n:"3 of 10 sessions"}],
+    notes:[
+      {d:"Aug 18",by:"Mohamed Badran",t:"Flagged for a family call. Nine months flat on UTR is not a technical problem — his strokes are fine. He has missed 20% of sessions this block and his body language in match play has changed. I want Mark and his parents on a call this week."},
+      {d:"Jul 22",by:"Dr. Lena Ortiz (TAP)",t:"Two sessions completed of ten. Reports pressure around college expectations and homesickness. Recommend increasing frequency and involving the family."}],
+    events:[{d:"Aug 22",t:"Family call — Mark, Mohamed, parents",n:"Scheduled"}],
+    thread:[{who:"coach",n:"Mohamed Badran",r:"Head Coach",d:"Tue 11:02am",t:"Mr. and Mrs. Park — I'd like to schedule a call this week. Jae-won is technically in good shape but I'm seeing signs he's struggling with the pressure, and I'd rather address it now than in six months. Nothing here is alarming, but it needs the three of us aligned."},
+            {who:"parent",n:"Sun-ho Park",r:"Parent",d:"Tue 10:15pm",t:"Thank you for telling us directly. Friday morning your time works. We have felt something was wrong from our calls with him."}]},
+
+  { id:"en", first:"Elena", last:"Novak", grade:9, country:"Czechia", flag:"CZE", coach:"Ana R.",
+    utr:[7.0,7.1,7.3,7.4,7.6,7.7,7.8,7.9,8.0,8.1,8.2,8.2],
+    skillsStart:[4.5,5.5,5.0,5.0,3.5,5.5], skillsNow:[6.0,7.0,6.5,6.0,5.0,7.0],
+    wins:22, losses:14, vsHigher:6, hours:571, sessions:146, scheduled:160,
+    mix:[.50,.12,.16,.16,.06], tournaments:9, videoSessions:18,
+    prev:{hours:0, sessions:0, tournaments:0, matches:0},
+    gpa:3.7, fitness:74, fitnessStart:61, mental:72, status:"good", statusLabel:"On track",
+    focus:"Building a repeatable service motion. Youngest in the full-time group.",
+    goals:[{t:"UTR 8.5 by spring",p:70,n:"8.2 now"},{t:"Consistent toss placement",p:60,n:"Improving"}],
+    notes:[{d:"Aug 14",by:"Ana Ruiz",t:"Adapting well to the full-time load for a 9th grader. Growth spurt has thrown off her timing on the serve — expected, and we're not over-coaching it."}],
+    events:[{d:"Sep 27",t:"SoCal Junior Open",n:"Entry submitted"}], thread:[]},
+
+  { id:"tw", first:"Tomas", last:"Weber", grade:12, country:"Germany", flag:"GER", coach:"Mark W.",
+    utr:[10.9,11.0,11.1,11.1,11.2,11.3,11.3,11.4,11.4,11.5,11.5,11.5],
+    skillsStart:[7.0,7.0,7.0,7.0,6.0,6.5], skillsNow:[8.0,8.0,7.5,8.0,7.0,7.5],
+    wins:29, losses:14, vsHigher:8, hours:604, sessions:152, scheduled:160,
+    mix:[.43,.16,.20,.15,.06], tournaments:12, videoSessions:27,
+    prev:{hours:588, sessions:150, tournaments:11, matches:41},
+    gpa:3.5, fitness:84, fitnessStart:76, mental:78, status:"warning", statusLabel:"Placement pending",
+    focus:"Three D1 conversations open, none closed. Needs one strong fall result.",
+    goals:[{t:"Commit by December",p:45,n:"3 programs in conversation"},{t:"Recruiting video refresh",p:80,n:"Filmed, editing"}],
+    notes:[{d:"Aug 12",by:"Mark Weil",t:"Good player, awkward recruiting position — he's just below the cut for the programs he wants and comfortably above the ones recruiting him hardest. One strong fall result changes the conversation entirely."}],
+    events:[{d:"Sep 13",t:"ITF J200 Costa Mesa",n:"Main draw"},{d:"Oct 4",t:"College showcase — Stanford",n:"Confirmed"}],
+    thread:[{who:"parent",n:"Anke Weber",r:"Parent",d:"Wed 2:00pm",t:"Where do the three conversations stand? We would like to understand the realistic range."},
+            {who:"coach",n:"Mark Weil",r:"Academy Director",d:"Wed 6:45pm",t:"Two mid-major D1 with partial scholarship interest, one high-major who wants to see a fall result first. I'll put the full picture in writing before the showcase."}]},
+
+  { id:"al", first:"Ava", last:"Lindqvist", grade:8, country:"United States", flag:"USA", coach:"Ana R.",
+    utr:[5.8,5.9,6.0,6.1,6.3,6.4,6.5,6.6,6.7,6.8,6.9,6.9],
+    skillsStart:[3.5,5.0,4.0,4.0,3.0,5.0], skillsNow:[5.0,6.5,5.5,5.5,4.5,6.5],
+    wins:18, losses:11, vsHigher:5, hours:462, sessions:142, scheduled:148,
+    mix:[.55,.11,.14,.14,.06], tournaments:6, videoSessions:14,
+    prev:{hours:401, sessions:124, tournaments:4, matches:21},
+    gpa:4.0, fitness:70, fitnessStart:58, mental:74, status:"good", statusLabel:"On track",
+    focus:"Fundamentals and load management. Deliberately capped training hours at this age.",
+    goals:[{t:"UTR 7.5 by spring",p:55,n:"6.9 now"},{t:"Clean split-step every point",p:75,n:"Much improved"}],
+    notes:[{d:"Aug 11",by:"Ana Ruiz",t:"We are intentionally holding her hours below the older group. She would train more if we let her. Long game here."}],
+    events:[{d:"Oct 11",t:"USTA L5 Ojai",n:"Entry submitted"}], thread:[]},
+
+  { id:"rc", first:"Rafael", last:"Costa", grade:10, country:"Portugal", flag:"POR", coach:"Mohamed B.",
+    utr:[9.2,9.3,9.4,9.4,9.3,9.2,9.1,9.1,9.1,9.1,9.1,9.1],
+    skillsStart:[6.5,7.0,6.0,6.5,5.0,6.5], skillsNow:[6.5,7.0,6.5,6.5,5.5,6.0],
+    wins:14, losses:13, vsHigher:4, hours:388, sessions:96, scheduled:160,
+    mix:[.34,.14,.12,.33,.07], tournaments:5, videoSessions:19,
+    prev:{hours:566, sessions:146, tournaments:10, matches:38},
+    gpa:3.6, fitness:58, fitnessStart:72, mental:69, status:"serious", statusLabel:"Return from injury",
+    focus:"Week 6 of a 10-week wrist rehab. Modified sessions only.",
+    goals:[{t:"Full-contact return by October",p:60,n:"Week 6 of 10"},{t:"Maintain fitness base",p:85,n:"On protocol"}],
+    notes:[{d:"Aug 18",by:"Ana Ruiz",t:"Wrist rehab on schedule. Cleared for two-handed backhand at 60% load, no serving yet. He is frustrated and pushing to do more — watch this, he will overdo it if unsupervised."}],
+    events:[{d:"Sep 29",t:"Rehab review — full clearance",n:"Scheduled"}],
+    thread:[{who:"student",n:"Rafael",r:"Player",d:"Mon 5:10pm",t:"Can I start serving at 50% next week? Feels totally normal now."},
+            {who:"coach",n:"Ana Ruiz",r:"Fitness Director",d:"Mon 5:35pm",t:"No — and the fact that it feels normal is exactly why we wait. Week 8 for serving, as planned. I promise the two extra weeks cost you nothing."}]}
+];
+
+/* ---- academy-level history (fictional sample) ---- */
+const CAPACITY = 68;
+const TUITION  = 68600;
+const ENROLMENT = [
+  {y:"2022–23", n:54},{y:"2023–24", n:58},{y:"2024–25", n:63},
+  {y:"2025–26", n:59},{y:"2026–27", n:61}
+];
+/* ret = share of that country's students who returned the following year */
+const COUNTRIES = [
+  {c:"United States", n:17, ret:74, yrs:2.4},
+  {c:"Brazil",        n:7,  ret:86, yrs:3.1},
+  {c:"Mexico",        n:6,  ret:83, yrs:2.9},
+  {c:"Germany",       n:5,  ret:80, yrs:2.6},
+  {c:"South Korea",   n:5,  ret:60, yrs:1.7},
+  {c:"China",         n:4,  ret:50, yrs:1.4},
+  {c:"Czechia",       n:3,  ret:100,yrs:3.3},
+  {c:"Finland",       n:3,  ret:100,yrs:3.0},
+  {c:"Portugal",      n:3,  ret:67, yrs:2.2},
+  {c:"Canada",        n:3,  ret:67, yrs:2.1},
+  {c:"Japan",         n:2,  ret:50, yrs:1.5},
+  {c:"Other (4)",     n:3,  ret:67, yrs:2.0}
+];
+const ROSTER_N = COUNTRIES.reduce((s,c)=>s+c.n,0);
+
+const STATUS_ORDER={critical:0,serious:1,warning:2,good:3};
+const STATUS_LABEL={good:"Good",warning:"Watch",serious:"Serious",critical:"Critical"};
+const UTR_FLAT=0.25;
+
+let state={role:"parent", playerId:"lf"};
+const $=(s,r=document)=>r.querySelector(s);
+const byId=id=>PLAYERS.find(p=>p.id===id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initials=p=>p.first[0]+p.last[0];
+const utrDelta=p=>+(p.utr[p.utr.length-1]-p.utr[0]).toFixed(1);
+const attendance=p=>Math.round(p.sessions/p.scheduled*100);
+const skillAvg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+const matches=p=>p.wins+p.losses;
+
+/* hours per bucket, forced to sum exactly to p.hours */
+function buckets(p){
+  const raw=p.mix.map(m=>p.hours*m);
+  const out=raw.map(v=>Math.round(v));
+  out[0]+=p.hours-out.reduce((a,b)=>a+b,0);
+  return BUCKETS.map((b,i)=>({...b, v:out[i]}));
+}
+/* monthly hours: shared seasonal shape, per-player phase jitter, sums to p.hours */
+function monthly(p){
+  const seed=p.id.charCodeAt(0)+p.id.charCodeAt(1);
+  const w=SEASON.map((s,i)=>s*(1+0.16*Math.sin(seed+i*1.7)));
+  const tot=w.reduce((a,b)=>a+b,0);
+  const out=w.map(x=>Math.round(p.hours*x/tot));
+  out[out.length-1]+=p.hours-out.reduce((a,b)=>a+b,0);
+  return out;
+}
+
+/* `flatBand` — movement smaller than this reads as "no change", not progress.
+   A UTR gain of +0.1 across a full year is a plateau; painting it green lies. */
+function chip(d,{suffix="",flatBand=0.05,dp=1,gold=false}={}){
+  const cls=d>flatBand?(gold?"gold":"up"):d<-flatBand?"down":"flat";
+  const arrow=d>flatBand?"▲":d<-flatBand?"▼":"—";
+  return `<span class="chip ${cls}">${arrow} ${d>0?"+":""}${d.toFixed(dp)}${suffix}</span>`;
+}
+const utrChip=(p,gold=false)=>chip(utrDelta(p),{flatBand:UTR_FLAT,gold});
+function badge(status,label){
+  return `<span class="badge b-${status}"><span class="bd"></span>${esc(label||STATUS_LABEL[status])}</span>`;
+}
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+const isNarrow=()=>window.innerWidth<720;
+
+/* Line — single series (UTR). No legend: the title names it. */
+function lineChart(p,{h=215}={}){
+  const W=isNarrow()?380:(h>260?560:660), H=isNarrow()?235:h, m={t:16,r:22,b:26,l:36};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b, vals=p.utr;
+  const lo=Math.floor((Math.min(...vals)-.35)*2)/2, hi=Math.ceil((Math.max(...vals)+.35)*2)/2;
+  const x=i=>m.l+iw*i/(vals.length-1), y=v=>m.t+ih-((v-lo)/(hi-lo))*ih;
+  let g="",ax="";
+  for(let v=lo;v<=hi+1e-9;v+=.5){const t=+v.toFixed(1);
+    g+=`<line class="gridline" x1="${m.l}" y1="${y(t).toFixed(1)}" x2="${W-m.r}" y2="${y(t).toFixed(1)}"/>`;
+    ax+=`<text x="${m.l-8}" y="${(y(t)+3.7).toFixed(1)}" text-anchor="end">${t.toFixed(1)}</text>`;}
+  const every=isNarrow()?3:2;
+  MONTHS.forEach((mo,i)=>{if(i%every===0||i===MONTHS.length-1)
+    ax+=`<text x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="middle">${mo}</text>`;});
+  const d=vals.map((v,i)=>`${i?"L":"M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const uid="lg"+p.id;
+  const hits=vals.map((v,i)=>`<g class="hit" data-i="${i}" data-v="${v}"><rect x="${(x(i)-iw/(vals.length-1)/2).toFixed(1)}" y="${m.t}" width="${(iw/(vals.length-1)).toFixed(1)}" height="${ih}" fill="transparent"/></g>`).join("");
+  return `<div class="chart" data-chart="line">
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="UTR from September to August, ${vals[0]} to ${vals[vals.length-1]}">
+      <defs><linearGradient id="${uid}" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="var(--series-1)" stop-opacity="0.24"/>
+        <stop offset="100%" stop-color="var(--series-1)" stop-opacity="0"/></linearGradient></defs>
+      ${g}<line class="axisline" x1="${m.l}" y1="${m.t+ih}" x2="${W-m.r}" y2="${m.t+ih}"/>
+      <path d="${d} L${x(vals.length-1).toFixed(1)},${m.t+ih} L${m.l},${m.t+ih} Z" fill="url(#${uid})"/>
+      <path d="${d}" fill="none" stroke="var(--series-1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle class="cur" r="5.5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2.5" opacity="0"/>
+      <circle cx="${x(vals.length-1).toFixed(1)}" cy="${y(vals[vals.length-1]).toFixed(1)}" r="5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2.5"/>
+      <g class="axis">${ax}</g>${hits}
+    </svg><div class="tip"></div></div>`;
+}
+
+/* Columns — monthly training hours. One series, so no legend. */
+function hoursChart(p){
+  const data=monthly(p);
+  const W=isNarrow()?380:660, H=isNarrow()?210:200, m={t:20,r:14,b:26,l:34};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  const hi=Math.ceil(Math.max(...data)/10)*10;
+  const bw=iw/data.length*0.66, step=iw/data.length;
+  const y=v=>m.t+ih-(v/hi)*ih;
+  let g="",ax="";
+  for(let t=0;t<=hi;t+=hi/4){
+    g+=`<line class="gridline" x1="${m.l}" y1="${y(t).toFixed(1)}" x2="${W-m.r}" y2="${y(t).toFixed(1)}"/>`;
+    ax+=`<text x="${m.l-8}" y="${(y(t)+3.7).toFixed(1)}" text-anchor="end">${Math.round(t)}</text>`;}
+  let bars="";
+  data.forEach((v,i)=>{
+    const cx=m.l+step*i+step/2, bh=Math.max(3,ih-(y(v)-m.t));
+    bars+=`<g class="hit" data-i="${i}" data-v="${v}">
+      <rect x="${(cx-step/2).toFixed(1)}" y="${m.t}" width="${step.toFixed(1)}" height="${ih}" fill="transparent"/>
+      <rect x="${(cx-bw/2).toFixed(1)}" y="${y(v).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="4" fill="var(--series-1)"/></g>`;
+    if(i%(isNarrow()?3:1)===0||i===data.length-1)
+      ax+=`<text x="${cx.toFixed(1)}" y="${H-6}" text-anchor="middle">${MONTHS[i]}</text>`;
+  });
+  return `<div class="chart" data-chart="bars">
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Training hours per month, September to August">
+      ${g}<line class="axisline" x1="${m.l}" y1="${m.t+ih}" x2="${W-m.r}" y2="${m.t+ih}"/>
+      ${bars}<g class="axis">${ax}</g>
+    </svg><div class="tip"></div></div>`;
+}
+
+/* Stacked hours bar + a value table — the table is the required relief for
+   the segments that sit below 3:1 contrast on a light surface. */
+function hoursStack(p){
+  const b=buckets(p), tot=p.hours;
+  const segs=b.map(s=>`<div style="flex:${s.v};background:${s.c}" title="${esc(s.label)}">${s.v/tot>0.11?s.v+"h":""}</div>`).join("");
+  const rows=b.map(s=>`<tr>
+      <td><span class="swatch" style="display:inline-block;background:${s.c};margin-right:8px"></span>${esc(s.label)}</td>
+      <td class="num"><b>${s.v}</b> h</td>
+      <td class="num" style="color:var(--muted)">${Math.round(s.v/tot*100)}%</td></tr>`).join("");
+  return `<div class="stack">${segs}</div>
+    <table class="mini-table"><tbody>${rows}
+      <tr><td style="font-weight:750;border-top:2px solid var(--border-strong)">Total on-site hours</td>
+          <td class="num" style="font-weight:750;border-top:2px solid var(--border-strong)">${tot} h</td>
+          <td class="num" style="border-top:2px solid var(--border-strong)"></td></tr></tbody></table>`;
+}
+
+/* Grouped bars — 2 series, legend + a direct label on every row. */
+function skillBars(p){
+  const rows=SKILLS.map((s,i)=>{
+    const a=p.skillsStart[i], b=p.skillsNow[i];
+    return `<div class="skill">
+      <div class="lab"><span class="nm">${s}</span><span><b>${b.toFixed(1)}</b><span style="color:var(--muted)"> / 10</span> &nbsp;${chip(+(b-a).toFixed(1))}</span></div>
+      <div class="track"><div class="bar b1" style="width:${b*10}%"></div><div class="bar b2" style="width:${a*10}%"></div></div>
+    </div>`;}).join("");
+  return `<div class="legend">
+      <span><i class="swatch" style="background:var(--series-1)"></i>Now (Aug)</span>
+      <span><i class="swatch" style="background:var(--series-2)"></i>Baseline (Sep)</span></div>${rows}`;
+}
+
+/* Dot plot — UTR change by player. One series, direct labels on both arms. */
+function movementChart(){
+  const data=[...PLAYERS].map(p=>({p,d:utrDelta(p)})).sort((a,b)=>b.d-a.d);
+  const W=660, rowH=40, H=data.length*rowH+38, m={t:12,r:56,b:26,l:112};
+  const iw=W-m.l-m.r, max=Math.max(1.8,...data.map(d=>Math.abs(d.d)));
+  const lo=-max*.35, hi=max, x=v=>m.l+((v-lo)/(hi-lo))*iw;
+  let g="",ax="";
+  [-0.5,0,0.5,1,1.5].filter(t=>t>=lo&&t<=hi).forEach(t=>{
+    g+=`<line class="${t===0?"axisline":"gridline"}" x1="${x(t).toFixed(1)}" y1="${m.t}" x2="${x(t).toFixed(1)}" y2="${H-m.b}"/>`;
+    ax+=`<text x="${x(t).toFixed(1)}" y="${H-7}" text-anchor="middle">${t>0?"+":""}${t}</text>`;});
+  let marks="";
+  data.forEach((d,i)=>{
+    const cy=m.t+i*rowH+rowH/2, neg=d.d<0;
+    const col=d.d>=0.9?"var(--good)":d.d>=UTR_FLAT?"var(--series-1)":d.d>-UTR_FLAT?"var(--warning)":"var(--critical)";
+    marks+=`<text x="${m.l-12}" y="${cy+4}" text-anchor="end" fill="var(--text-secondary)" font-size="12.5">${esc(d.p.first)} ${esc(d.p.last[0])}.</text>
+      <line x1="${x(0).toFixed(1)}" y1="${cy}" x2="${x(d.d).toFixed(1)}" y2="${cy}" stroke="${col}" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+      <circle cx="${x(d.d).toFixed(1)}" cy="${cy}" r="6" fill="${col}" stroke="var(--surface-1)" stroke-width="2"/>
+      <text x="${(x(d.d)+(neg?-14:14)).toFixed(1)}" y="${cy+4.5}" text-anchor="${neg?"end":"start"}" font-size="12.5" font-weight="700" fill="var(--text-primary)" style="font-variant-numeric:tabular-nums">${d.d>0?"+":""}${d.d.toFixed(1)}</text>`;});
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="UTR change over the year by player">${g}${marks}<g class="axis">${ax}</g></svg></div>`;
+}
+
+/* Columns — enrolment by year against capacity. One series; the capacity
+   rule is labelled directly so it never needs a legend. */
+function enrolChart(){
+  const W=660,H=250,m={t:26,r:16,b:34,l:36};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  const hi=Math.ceil(CAPACITY/10)*10;
+  const step=iw/ENROLMENT.length, bw=step*0.54;
+  const y=v=>m.t+ih-(v/hi)*ih;
+  let g="",ax="";
+  for(let t=0;t<=hi;t+=hi/4){
+    g+=`<line class="gridline" x1="${m.l}" y1="${y(t).toFixed(1)}" x2="${W-m.r}" y2="${y(t).toFixed(1)}"/>`;
+    ax+=`<text x="${m.l-8}" y="${(y(t)+3.7).toFixed(1)}" text-anchor="end">${Math.round(t)}</text>`;}
+  let bars="";
+  ENROLMENT.forEach((e,i)=>{
+    const cx=m.l+step*i+step/2, top=y(e.n), last=i===ENROLMENT.length-1;
+    // label inside the bar: above it, the tallest column collides with the capacity rule
+    bars+=`<rect x="${(cx-bw/2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${(m.t+ih-top).toFixed(1)}"
+             rx="5" fill="var(--series-1)"/>
+      ${last?`<rect x="${(cx-bw/2).toFixed(1)}" y="${(top-6).toFixed(1)}" width="${bw.toFixed(1)}" height="4" rx="2" fill="var(--gold)"/>`:""}
+      <text x="${cx.toFixed(1)}" y="${(top+20).toFixed(1)}" text-anchor="middle" font-size="13.5" font-weight="750"
+            fill="#fff" style="font-variant-numeric:tabular-nums">${e.n}</text>`;
+    ax+=`<text x="${cx.toFixed(1)}" y="${H-8}" text-anchor="middle" font-weight="${last?750:500}">${e.y}</text>`;
+  });
+  const cy=y(CAPACITY);
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Enrolment by year against a capacity of ${CAPACITY}">
+    ${g}
+    <line x1="${m.l}" y1="${cy.toFixed(1)}" x2="${W-m.r}" y2="${cy.toFixed(1)}" stroke="var(--critical)" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="${W-m.r}" y="${(cy-7).toFixed(1)}" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--critical)">Capacity ${CAPACITY}</text>
+    <line class="axisline" x1="${m.l}" y1="${m.t+ih}" x2="${W-m.r}" y2="${m.t+ih}"/>
+    ${bars}<g class="axis">${ax}</g></svg></div>`;
+}
+
+/* Horizontal bars — students by country. One series, every bar directly labelled. */
+function countryChart(){
+  const d=[...COUNTRIES].sort((a,b)=>b.n-a.n);
+  const rowH=27, W=660, H=d.length*rowH+16, m={l:118,r:44};
+  const iw=W-m.l-m.r, max=Math.max(...d.map(x=>x.n));
+  let out="";
+  d.forEach((x,i)=>{
+    const cy=8+i*rowH+rowH/2, w=Math.max(3,iw*x.n/max);
+    out+=`<text x="${m.l-12}" y="${cy+4.5}" text-anchor="end" font-size="12.5" fill="var(--text-secondary)">${esc(x.c)}</text>
+      <rect x="${m.l}" y="${cy-8}" width="${w.toFixed(1)}" height="16" rx="4" fill="var(--series-1)"/>
+      <text x="${(m.l+w+9).toFixed(1)}" y="${cy+4.5}" font-size="12.5" font-weight="700" fill="var(--text-primary)"
+            style="font-variant-numeric:tabular-nums">${x.n}</text>`;
+  });
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Number of students by country of origin">${out}</svg></div>`;
+}
+
+/* Retention by country — a table, because three measures across twelve
+   categories is a table, not a chart. Worst retention first. */
+function retentionTable(){
+  const d=[...COUNTRIES].sort((a,b)=>a.ret-b.ret||b.n-a.n);
+  const band=r=>r>=85?"good":r>=70?"warning":r>=60?"serious":"critical";
+  return `<div class="scroll"><table>
+    <thead><tr><th>Country</th><th class="num">Students</th><th class="num">Share</th>
+      <th class="num">Avg years enrolled</th><th class="num">Year-on-year retention</th></tr></thead>
+    <tbody>${d.map(x=>`<tr>
+      <td style="font-weight:600">${esc(x.c)}</td>
+      <td class="num">${x.n}</td>
+      <td class="num" style="color:var(--muted)">${Math.round(x.n/ROSTER_N*100)}%</td>
+      <td class="num">${x.yrs.toFixed(1)}</td>
+      <td class="num">${badge(band(x.ret), x.ret+"%")}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function ring(pct,size=36){
+  const r=(size-5)/2, c=2*Math.PI*r;
+  const col=pct>=75?"var(--good)":pct>=45?"var(--series-1)":pct>=25?"var(--warning)":"var(--critical)";
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${pct} percent" style="flex:0 0 auto">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--grid)" stroke-width="4"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="4" stroke-linecap="round"
+      stroke-dasharray="${(c*pct/100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 ${size/2} ${size/2})"/>
+    <text x="${size/2}" y="${size/2+3.8}" text-anchor="middle" font-size="10.5" font-weight="750" fill="var(--text-primary)">${pct}</text></svg>`;
+}
+
+/* ============================================================
+   BLOCKS
+   ============================================================ */
+function playerHero(p){
+  return `<div class="card hero-card"><div class="phead">
+    <div class="avatar">${initials(p)}</div>
+    <div class="who"><h3>${esc(p.first)} ${esc(p.last)}</h3>
+      <p><span>Grade ${p.grade}</span><span>·</span><span>${esc(p.country)}</span><span>·</span>
+         <span>Coach ${esc(p.coach)}</span>${badge(p.status,p.statusLabel)}</p></div>
+    <div class="hero-num"><div class="label">UTR rating</div>
+      <div class="val">${p.utr[p.utr.length-1].toFixed(1)}</div>
+      <div style="margin-top:6px">${utrChip(p,true)} <span style="color:rgba(255,255,255,.7);font-size:12.5px">this year</span></div></div>
+  </div></div>`;
+}
+
+function timeBand(p){
+  const b=buckets(p), priv=b[1].v, fit=b[3].v;
+  const pv=p.prev, first=!pv.hours;
+  const d=(now,was)=>first?"":chip(now-was,{dp:0,flatBand:0.5});
+  // last year's bucket hours, so every tile carries the same year-on-year cue
+  const prevB=i=>Math.round(pv.hours*p.mix[i]);
+  const t=(v,unit,label,delta)=>`<div class="ttile">
+      <div class="v">${v}${unit?`<small>${unit}</small>`:""}</div>
+      <div class="t">${label}</div>${delta?`<div class="d">${delta}</div>`:""}</div>`;
+  return `<div class="time-band">
+    <p class="eyebrow">Time invested · 2025–26</p>
+    <p class="headline">Since September, ${esc(p.first)} has spent <b>${p.hours} hours</b> on court and in the gym at Weil —
+      ${first?"his first full year with us.":`${Math.abs(p.hours-pv.hours)} hours ${p.hours>=pv.hours?"more":"fewer"} than last year.`}</p>
+    <div class="tgrid">
+      ${t(p.hours,"h","Total training hours",d(p.hours,pv.hours))}
+      ${t(p.sessions,"","Days of training",d(p.sessions,pv.sessions))}
+      ${t(Math.round(priv/1.5),"",`One-to-one lessons (${priv} h)`,d(Math.round(priv/1.5),Math.round(prevB(1)/1.5)))}
+      ${t(fit,"h","Strength & conditioning",d(fit,prevB(3)))}
+      ${t(matches(p),"","Matches played",d(matches(p),pv.matches))}
+      ${t(p.tournaments,"","Tournaments entered",d(p.tournaments,pv.tournaments))}
+    </div></div>`;
+}
+
+function gainsStrip(p){
+  const g=[
+    {v:utrDelta(p),l:"UTR rating",dp:1},
+    {v:+(skillAvg(p.skillsNow)-skillAvg(p.skillsStart)).toFixed(1),l:"Technical average",dp:1},
+    {v:p.fitness-p.fitnessStart,l:"Fitness score",dp:0},
+    {v:p.vsHigher,l:"Wins vs higher-rated",dp:0,raw:true}
+  ];
+  return `<div class="gains">${g.map(x=>`<div class="gain">
+      <span class="g-v">${x.raw?"":(x.v>0?"+":"")}${x.v.toFixed(x.dp)}</span>
+      <span class="g-l">${x.l}</span></div>`).join("")}</div>`;
+}
+
+function threadBlock(p){
+  const msgs=p.thread.length?p.thread.map(m=>`<div class="msg ${m.who}">
+      <div class="mini">${esc(m.n.split(" ").map(w=>w[0]).slice(0,2).join(""))}</div>
+      <div class="body"><div class="meta"><b>${esc(m.n)}</b> · ${esc(m.r)} · ${esc(m.d)}</div><p>${esc(m.t)}</p></div></div>`).join("")
+    :`<p style="color:var(--muted);font-size:13.5px;margin:0 0 10px">No messages yet for this player.</p>`;
+  return `<div class="card"><h2><span class="accentbar"></span>Conversation</h2>
+    <p class="sub">Coaches, parents and the player in one thread per student — not scattered across email and WhatsApp.</p>
+    <div id="thread">${msgs}</div>
+    <div class="composer"><textarea id="msgBox" rows="2" placeholder="Write a message…"></textarea>
+      <button class="btn gold" id="sendBtn">Send</button></div></div>`;
+}
+
+function playerSelect(current){
+  return `<div class="selwrap"><label for="pSel">Viewing</label>
+    <select id="pSel">${PLAYERS.map(p=>`<option value="${p.id}"${p.id===current?" selected":""}>${esc(p.first)} ${esc(p.last)} · Gr ${p.grade} · UTR ${p.utr[p.utr.length-1].toFixed(1)}</option>`).join("")}</select></div>`;
+}
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+function parentView(){
+  const p=byId(state.playerId);
+  return `${playerSelect(p.id)}${playerHero(p)}${timeBand(p)}
+  <div class="grid g-58">
+    <div class="card"><h2><span class="accentbar"></span>Where those hours went</h2>
+      <p class="sub">Every logged session, by type. Court time is the product you are buying.</p>
+      ${hoursStack(p)}</div>
+    <div class="card"><h2><span class="accentbar"></span>Training hours by month</h2>
+      <p class="sub">Consistency across the year, including the two blocks at home.</p>
+      ${hoursChart(p)}</div>
+  </div>
+
+  <div class="card"><h2><span class="accentbar"></span>What that time produced</h2>
+    <p class="sub">Measured gains since September.</p>
+    ${gainsStrip(p)}</div>
+
+  <div class="grid g-2">
+    <div class="card"><h2><span class="accentbar"></span>UTR rating · Sep to Aug</h2>
+      <p class="sub">Universal Tennis Rating — the number college coaches actually look at.</p>
+      ${lineChart(p,{h:300})}</div>
+    <div class="card"><h2><span class="accentbar"></span>Technical development</h2>
+      <p class="sub">Coach assessment after each block, against the September baseline.</p>
+      ${skillBars(p)}</div>
+  </div>
+
+  <div class="grid g-58">
+    <div class="card"><h2><span class="accentbar"></span>What we're working on</h2>
+      <div class="callout">${esc(p.focus)}</div>
+      ${p.notes.map(n=>`<div class="note"><div class="meta">${esc(n.d)} · ${esc(n.by)}</div><p>${esc(n.t)}</p></div>`).join("")}</div>
+    <div>
+      <div class="card"><h2><span class="accentbar"></span>This term</h2>
+        ${tiles([{t:"Attendance",v:`${attendance(p)}<small>%</small>`,n:`${p.sessions} of ${p.scheduled} training days`},
+                 {t:"Match record",v:`${p.wins}–${p.losses}`,n:`${p.vsHigher} wins over higher-rated`},
+                 {t:"Academic GPA",v:p.gpa.toFixed(1),n:"Weil College Prep"},
+                 {t:"Video reviews",v:p.videoSessions,n:"filmed and analysed"}])}</div>
+      <div class="card"><h2><span class="accentbar"></span>Upcoming</h2>
+        ${p.events.length?p.events.map(e=>`<div class="goal"><div class="g-body"><h4>${esc(e.t)}</h4><p>${esc(e.d)} · ${esc(e.n)}</p></div></div>`).join("")
+          :`<p style="color:var(--muted);font-size:13.5px">Nothing scheduled.</p>`}</div>
+    </div>
+  </div>
+  ${threadBlock(p)}`;
+}
+
+function tiles(items){
+  return `<div class="tiles">${items.map(t=>`<div class="tile"><div class="t">${esc(t.t)}</div>
+    <div class="v">${t.v}</div><div class="n">${t.n||""}</div></div>`).join("")}</div>`;
+}
+
+function studentView(){
+  const p=byId(state.playerId);
+  return `${playerSelect(p.id)}${playerHero(p)}
+  <div class="card"><h2><span class="accentbar"></span>What you've put in this year</h2>
+    ${gainsStrip(p)}</div>
+  <div class="grid g-73">
+    <div>
+      <div class="card"><h2><span class="accentbar"></span>My goals</h2>
+        <p class="sub">Set with your coach at the start of the block. Updated as results come in.</p>
+        ${p.goals.map(g=>`<div class="goal">${ring(g.p)}<div class="g-body"><h4>${esc(g.t)}</h4><p>${esc(g.n)}</p></div></div>`).join("")}</div>
+      <div class="card"><h2><span class="accentbar"></span>My technical scores</h2>${skillBars(p)}</div>
+    </div>
+    <div>
+      <div class="card"><h2><span class="accentbar"></span>This week</h2>
+        ${tiles([{t:"Hours",v:p.hours,n:"this year"},{t:"Fitness",v:p.fitness,n:"of 100"},
+                 {t:"Mental",v:p.mental,n:"TAP score"},{t:"Record",v:`${p.wins}–${p.losses}`,n:"season"}])}</div>
+      <div class="card"><h2><span class="accentbar"></span>Coach's focus for you</h2>
+        <div class="callout">${esc(p.focus)}</div></div>
+      <div class="card"><h2><span class="accentbar"></span>Log a reflection</h2>
+        <p class="sub">Two minutes after practice. Your coach sees it before the next session.</p>
+        <textarea rows="4" placeholder="How did today go? What felt good, what didn't?"></textarea>
+        <div style="margin-top:11px"><button class="btn">Save reflection</button></div></div>
+    </div>
+  </div>${threadBlock(p)}`;
+}
+
+function coachView(){
+  const p=byId(state.playerId);
+  const roster=[...PLAYERS].sort((a,b)=>STATUS_ORDER[a.status]-STATUS_ORDER[b.status]);
+  return `<div class="card"><h2><span class="accentbar"></span>My roster</h2>
+    <p class="sub">Sorted by attention needed. Click a player to open their training log.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Player</th><th>Status</th><th class="num">UTR</th><th class="num">Δ year</th>
+        <th class="num">Hours</th><th class="num">Record</th><th class="num">Attend.</th><th class="num">Skill avg</th></tr></thead>
+      <tbody>${roster.map(r=>{const att=attendance(r);
+        return `<tr class="clickable" data-pick="${r.id}">
+          <td><div class="tname"><div class="mini">${initials(r)}</div>
+            <div><div style="font-weight:600">${esc(r.first)} ${esc(r.last)}</div><div class="sub">Gr ${r.grade} · ${esc(r.flag)}</div></div></div></td>
+          <td>${badge(r.status,r.statusLabel)}</td>
+          <td class="num" style="font-weight:700">${r.utr[r.utr.length-1].toFixed(1)}</td>
+          <td class="num">${utrChip(r)}</td>
+          <td class="num">${r.hours}</td>
+          <td class="num">${r.wins}–${r.losses}</td>
+          <td class="num" style="color:${att<85?"var(--critical)":"inherit"};font-weight:${att<85?750:400}">${att}%</td>
+          <td class="num">${skillAvg(r.skillsNow).toFixed(1)}</td></tr>`;}).join("")}</tbody>
+    </table></div></div>
+
+  <div class="grid g-58">
+    <div class="card"><h2><span class="accentbar"></span>Log today's session · ${esc(p.first)} ${esc(p.last)}</h2>
+      <p class="sub">Ninety seconds courtside. This is the only input the whole system needs.</p>
+      <div id="sliders">${SKILLS.map((s,i)=>`<div class="slider-row">
+        <label for="sl${i}">${s}</label>
+        <input type="range" id="sl${i}" min="0" max="10" step="0.5" value="${p.skillsNow[i]}">
+        <output for="sl${i}">${p.skillsNow[i].toFixed(1)}</output></div>`).join("")}</div>
+      <div style="margin-top:15px"><textarea id="noteBox" rows="4" placeholder="Session note — what happened, what's next. Parents see a version of this on Friday."></textarea></div>
+      <div class="pill-row" style="margin-top:13px">
+        <button class="btn gold" id="saveNote">Save session</button>
+        <button class="btn ghost">Flag for director</button>
+        <button class="btn ghost">Attach video clip</button></div></div>
+    <div>
+      <div class="card"><h2><span class="accentbar"></span>${esc(p.first)}'s trajectory</h2>${lineChart(p,{h:185})}</div>
+      <div class="card"><h2><span class="accentbar"></span>Recent notes</h2>
+        <div id="noteList">${p.notes.map(n=>`<div class="note"><div class="meta">${esc(n.d)} · ${esc(n.by)}</div><p>${esc(n.t)}</p></div>`).join("")}</div></div>
+    </div>
+  </div>${threadBlock(p)}`;
+}
+
+function adminView(){
+  const n=PLAYERS.length;
+  const avgDelta=+(PLAYERS.reduce((s,p)=>s+utrDelta(p),0)/n).toFixed(2);
+  const atRisk=PLAYERS.filter(p=>p.status==="critical"||p.status==="serious").length;
+  const seniors=PLAYERS.filter(p=>p.grade===12), placed=seniors.filter(p=>p.status==="good").length;
+  const avgAtt=Math.round(PLAYERS.reduce((s,p)=>s+attendance(p),0)/n);
+  const totHours=PLAYERS.reduce((s,p)=>s+p.hours,0);
+  const alerts=PLAYERS.filter(p=>p.status!=="good").sort((a,b)=>STATUS_ORDER[a.status]-STATUS_ORDER[b.status]);
+  return `<div class="time-band">
+    <p class="eyebrow">Academy overview · 2026–27</p>
+    <p class="headline">Across the sample roster, coaches have delivered <b>${totHours.toLocaleString()} hours</b> of training this year,
+      for an average rating gain of <b>+${avgDelta} UTR</b> per player.</p>
+    <div class="tgrid">
+      <div class="ttile"><div class="v" style="color:var(--gold-2)">${atRisk}</div><div class="t">Retention risk — flagged this week</div></div>
+      <div class="ttile"><div class="v">+${avgDelta}</div><div class="t">Average UTR gain, year to date</div></div>
+      <div class="ttile"><div class="v">${placed}<small>/${seniors.length}</small></div><div class="t">Seniors committed or signed</div></div>
+      <div class="ttile"><div class="v">${avgAtt}<small>%</small></div><div class="t">Roster attendance average</div></div>
+      <div class="ttile"><div class="v">${totHours.toLocaleString()}<small>h</small></div><div class="t">Coached hours delivered</div></div>
+      <div class="ttile"><div class="v">${n}</div><div class="t">Players in this sample</div></div>
+    </div></div>
+
+  <div class="callout" style="border-left-color:var(--critical);background:rgba(208,59,59,.09)">
+    <b>Why this page exists.</b> At $68,600 per boarding place, one retained family is worth more than this entire
+    system costs to run. Below is the early-warning list — the students whose numbers changed before anyone said
+    anything out loud.</div>
+
+  <div class="grid g-58">
+    <div class="card"><h2><span class="accentbar"></span>Needs attention</h2>
+      <p class="sub">Ranked by severity, from attendance, rating movement and coach input.</p>
+      ${alerts.map(p=>`<div class="goal"><div class="mini" style="width:36px;height:36px">${initials(p)}</div>
+        <div class="g-body"><h4>${esc(p.first)} ${esc(p.last)} ${badge(p.status,p.statusLabel)}</h4>
+        <p>${esc(p.notes[0]?p.notes[0].t.slice(0,150)+"…":"")}</p></div></div>`).join("")}</div>
+    <div class="card"><h2><span class="accentbar"></span>UTR movement · year to date</h2>
+      <p class="sub">The academy's actual product, one dot per player.</p>
+      ${movementChart()}</div>
+  </div>
+
+  <div class="grid g-2">
+    <div class="card"><h2><span class="accentbar"></span>Enrolment · five years</h2>
+      <p class="sub">Full-time places filled at the start of each academic year, against capacity.</p>
+      ${enrolChart()}
+      <div class="callout" style="margin:14px 0 0">
+        <b>${CAPACITY-ROSTER_N} places unfilled this year.</b> At the published boarding rate that is
+        <b>$${((CAPACITY-ROSTER_N)*TUITION).toLocaleString()}</b> of capacity not billed —
+        before counting anyone who leaves mid-year.</div>
+    </div>
+    <div class="card"><h2><span class="accentbar"></span>Where students come from</h2>
+      <p class="sub">${ROSTER_N} students, ${COUNTRIES.length-1}+ countries. Recruiting concentration is a risk in itself.</p>
+      ${countryChart()}</div>
+  </div>
+
+  <div class="card"><h2><span class="accentbar"></span>Retention by country</h2>
+    <p class="sub">Share of each country's students who returned the following year. Worst first.</p>
+    ${retentionTable()}
+    <div class="callout" style="margin:15px 0 0;border-left-color:var(--critical);background:rgba(208,59,59,.09)">
+      <b>The pattern worth a meeting.</b> Latin American and central European families stay three years or more.
+      East Asian families average under two, and barely half return — eleven students, and the difference between
+      60% and 85% retention across that group is roughly
+      <b>$${(Math.round((0.85-0.60)*11)*TUITION).toLocaleString()}</b> a year. That is a recruiting, language-support
+      or agent-quality question, and right now nothing in the operation surfaces it.</div>
+  </div>
+
+  <div class="card"><h2><span class="accentbar"></span>Full roster</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Player</th><th class="num">Gr</th><th>Country</th><th>Coach</th><th>Status</th>
+        <th class="num">UTR</th><th class="num">Δ year</th><th class="num">Hours</th><th class="num">Attend.</th><th class="num">GPA</th></tr></thead>
+      <tbody>${[...PLAYERS].sort((a,b)=>STATUS_ORDER[a.status]-STATUS_ORDER[b.status]).map(p=>{const att=attendance(p);
+        return `<tr class="clickable" data-pick="${p.id}">
+          <td><div class="tname"><div class="mini">${initials(p)}</div><div style="font-weight:600">${esc(p.first)} ${esc(p.last)}</div></div></td>
+          <td class="num">${p.grade}</td><td>${esc(p.country)}</td><td>${esc(p.coach)}</td>
+          <td>${badge(p.status,p.statusLabel)}</td>
+          <td class="num" style="font-weight:700">${p.utr[p.utr.length-1].toFixed(1)}</td>
+          <td class="num">${utrChip(p)}</td><td class="num">${p.hours}</td>
+          <td class="num" style="color:${att<85?"var(--critical)":"inherit"};font-weight:${att<85?750:400}">${att}%</td>
+          <td class="num">${p.gpa.toFixed(1)}</td></tr>`;}).join("")}</tbody>
+    </table></div></div>`;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const ROLE_TEXT={
+  parent:"Parent view — what a family in São Paulo or Seoul opens on a Friday morning.",
+  student:"Student view — the player's own hours, goals and scores.",
+  coach:"Coach view — roster triage, then ninety seconds of input per session.",
+  admin:"Director view — retention risk, hours delivered and rating movement across the academy."
+};
+
+function render(){
+  $("#rolebarText").textContent=ROLE_TEXT[state.role];
+  $("#view").innerHTML = state.role==="parent"?parentView()
+    : state.role==="student"?studentView()
+    : state.role==="coach"?coachView() : adminView();
+  wire();
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function wire(){
+  const sel=$("#pSel");
+  if(sel) sel.addEventListener("change",e=>{state.playerId=e.target.value;render();});
+
+  document.querySelectorAll("[data-pick]").forEach(row=>row.addEventListener("click",()=>{
+    state.playerId=row.dataset.pick;
+    if(state.role==="admin"){state.role="coach";syncRoleButtons();}
+    render();
+  }));
+
+  document.querySelectorAll("#sliders input[type=range]").forEach(r=>
+    r.addEventListener("input",()=>{r.nextElementSibling.textContent=(+r.value).toFixed(1);}));
+
+  const save=$("#saveNote");
+  if(save) save.addEventListener("click",()=>{
+    const box=$("#noteBox"), txt=box.value.trim(); if(!txt) return;
+    const p=byId(state.playerId);
+    SKILLS.forEach((s,i)=>{p.skillsNow[i]=+$("#sl"+i).value;});
+    p.notes.unshift({d:"Today",by:"Mohamed Badran",t:txt});
+    box.value=""; render();
+  });
+
+  const send=$("#sendBtn");
+  if(send) send.addEventListener("click",()=>{
+    const box=$("#msgBox"), txt=box.value.trim(); if(!txt) return;
+    const p=byId(state.playerId);
+    const me=state.role==="student"?{who:"student",n:p.first,r:"Player"}
+      :state.role==="parent"?{who:"parent",n:"You",r:"Parent"}
+      :{who:"coach",n:"You",r:state.role==="admin"?"Academy Director":"Coach"};
+    p.thread.push({...me,d:"Just now",t:txt});
+    box.value=""; render();
+  });
+
+  document.querySelectorAll('[data-chart]').forEach(setupTip);
+}
+
+function setupTip(root){
+  const svg=root.querySelector("svg"), tip=root.querySelector(".tip");
+  const cur=root.querySelector(".cur");
+  const kind=root.dataset.chart;
+  const path=kind==="line"?svg.querySelectorAll("path")[1]:null;
+  root.querySelectorAll(".hit").forEach(h=>{
+    h.addEventListener("mouseenter",()=>{
+      const i=+h.dataset.i, v=+h.dataset.v;
+      const box=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal;
+      const sx=box.width/vb.width, sy=box.height/vb.height;
+      let px,py;
+      if(kind==="line"){
+        // recover the vertex from the path's own d attribute
+        const d=path.getAttribute("d").split(" ")[i].replace(/^[ML]/,"").split(",");
+        px=+d[0]; py=+d[1];
+        cur.setAttribute("cx",px); cur.setAttribute("cy",py); cur.setAttribute("opacity","1");
+        tip.innerHTML=`<b>${v.toFixed(1)}</b> UTR<br><span style="opacity:.75">${MONTHS[i]}</span>`;
+      }else{
+        const bar=h.querySelectorAll("rect")[1];
+        px=+bar.getAttribute("x")+ +bar.getAttribute("width")/2; py=+bar.getAttribute("y");
+        tip.innerHTML=`<b>${v}</b> hours<br><span style="opacity:.75">${MONTHS[i]}</span>`;
+      }
+      tip.style.opacity="1";
+      const tw=tip.offsetWidth;
+      tip.style.left=Math.max(0,Math.min(box.width-tw,px*sx-tw/2))+"px";
+      tip.style.top=Math.max(0,py*sy-tip.offsetHeight-12)+"px";
+    });
+  });
+  root.addEventListener("mouseleave",()=>{
+    tip.style.opacity="0";
+    if(cur) cur.setAttribute("opacity","0");
+  });
+}
+
+function syncRoleButtons(){
+  document.querySelectorAll(".roles button").forEach(b=>
+    b.setAttribute("aria-pressed",String(b.dataset.role===state.role)));
+}
+document.querySelectorAll(".roles button").forEach(b=>
+  b.addEventListener("click",()=>{state.role=b.dataset.role;syncRoleButtons();render();}));
+$("#themeBtn").addEventListener("click",()=>{
+  const c=document.documentElement.getAttribute("data-theme");
+  document.documentElement.setAttribute("data-theme",c==="dark"?"light":"dark");
+});
+
+/* re-render only when the layout crosses the narrow breakpoint */
+let wasNarrow=isNarrow();
+window.addEventListener("resize",()=>{ if(isNarrow()!==wasNarrow){wasNarrow=isNarrow();render();} });
+
+$("#brandSlot").innerHTML = brandMark();
+render();
+</script>
+</body>
+</html>
