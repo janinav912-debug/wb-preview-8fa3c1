@@ -181,6 +181,15 @@ header.top{
 .gain .g-v{font-size:23px;font-weight:750;color:var(--success-text);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .gain .g-l{font-size:11px;color:var(--text-secondary);font-weight:600}
 
+.facts{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.fact{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:7px;
+  background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-secondary);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.only{margin-left:9px;font-size:9.5px;font-weight:750;letter-spacing:.09em;padding:2.5px 8px;
+  border-radius:6px;background:var(--brand);color:var(--gold);text-transform:uppercase}
+:root[data-theme="dark"] .only{background:var(--gold);color:var(--brand)}
+
 /* ---------- badges ---------- */
 .badge{
   display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
@@ -369,7 +378,7 @@ const PLAYERS=[
     utr:[10.1,10.2,10.4,10.4,10.7,10.9,11.0,11.3,11.4,11.6,11.7,11.8],
     skillsStart:[6.0,7.0,5.5,6.0,4.5,6.5], skillsNow:[7.5,8.5,6.5,7.5,6.0,8.0],
     wins:31, losses:12, vsHigher:7, hours:612, sessions:155, scheduled:160,
-    mix:[.44,.15,.19,.16,.06], tournaments:11, videoSessions:26,
+    mix:[.44,.15,.19,.16,.06], tournaments:11, notesLogged:22, videoSessions:26,
     prev:{hours:548, sessions:143, tournaments:8, matches:36},
     gpa:3.4, fitness:82, fitnessStart:68, mental:76, status:"good", statusLabel:"On track",
     focus:"Second-serve depth and holding the baseline against heavy topspin.",
@@ -392,7 +401,7 @@ const PLAYERS=[
     utr:[11.6,11.7,11.8,11.9,12.0,12.0,12.1,12.2,12.3,12.3,12.4,12.4],
     skillsStart:[7.5,7.5,7.0,7.5,6.5,7.5], skillsNow:[8.5,8.5,8.0,8.5,7.5,8.5],
     wins:38, losses:9, vsHigher:11, hours:648, sessions:157, scheduled:160,
-    mix:[.40,.18,.22,.14,.06], tournaments:13, videoSessions:31,
+    mix:[.40,.18,.22,.14,.06], tournaments:13, notesLogged:9, videoSessions:31,
     prev:{hours:621, sessions:153, tournaments:12, matches:44},
     gpa:3.8, fitness:88, fitnessStart:80, mental:85, status:"good", statusLabel:"Committed",
     focus:"Match sharpening ahead of the fall season. Verbal commitment signed in July.",
@@ -407,7 +416,7 @@ const PLAYERS=[
     utr:[8.2,8.3,8.6,8.7,8.9,9.1,9.1,9.3,9.4,9.5,9.6,9.6],
     skillsStart:[5.0,6.5,5.5,5.5,4.0,6.0], skillsNow:[6.5,8.0,7.0,7.0,5.5,7.5],
     wins:27, losses:15, vsHigher:9, hours:598, sessions:149, scheduled:160,
-    mix:[.47,.13,.18,.16,.06], tournaments:10, videoSessions:22,
+    mix:[.47,.13,.18,.16,.06], tournaments:10, notesLogged:19, videoSessions:22,
     prev:{hours:503, sessions:131, tournaments:6, matches:31},
     gpa:3.9, fitness:79, fitnessStart:63, mental:81, status:"good", statusLabel:"Rising fast",
     focus:"Net play — the single biggest gap between her and the next tier.",
@@ -423,7 +432,7 @@ const PLAYERS=[
     utr:[10.8,10.9,11.0,10.9,10.9,10.8,10.9,10.9,10.8,10.9,10.9,10.9],
     skillsStart:[7.0,7.5,6.5,7.0,5.5,7.0], skillsNow:[7.5,7.5,7.0,7.0,6.0,7.0],
     wins:19, losses:21, vsHigher:3, hours:521, sessions:128, scheduled:160,
-    mix:[.52,.09,.15,.17,.07], tournaments:7, videoSessions:11,
+    mix:[.52,.09,.15,.17,.07], tournaments:7, notesLogged:14, videoSessions:11,
     prev:{hours:594, sessions:155, tournaments:11, matches:47},
     gpa:3.1, fitness:71, fitnessStart:74, mental:58, status:"critical", statusLabel:"Needs attention",
     focus:"Plateaued for nine months. Attendance and competitive intensity both slipping.",
@@ -441,7 +450,7 @@ const PLAYERS=[
     utr:[7.0,7.1,7.3,7.4,7.6,7.7,7.8,7.9,8.0,8.1,8.2,8.2],
     skillsStart:[4.5,5.5,5.0,5.0,3.5,5.5], skillsNow:[6.0,7.0,6.5,6.0,5.0,7.0],
     wins:22, losses:14, vsHigher:6, hours:571, sessions:146, scheduled:160,
-    mix:[.50,.12,.16,.16,.06], tournaments:9, videoSessions:18,
+    mix:[.50,.12,.16,.16,.06], tournaments:9, notesLogged:17, videoSessions:18,
     prev:{hours:0, sessions:0, tournaments:0, matches:0},
     gpa:3.7, fitness:74, fitnessStart:61, mental:72, status:"good", statusLabel:"On track",
     focus:"Building a repeatable service motion. Youngest in the full-time group.",
@@ -453,7 +462,7 @@ const PLAYERS=[
     utr:[10.9,11.0,11.1,11.1,11.2,11.3,11.3,11.4,11.4,11.5,11.5,11.5],
     skillsStart:[7.0,7.0,7.0,7.0,6.0,6.5], skillsNow:[8.0,8.0,7.5,8.0,7.0,7.5],
     wins:29, losses:14, vsHigher:8, hours:604, sessions:152, scheduled:160,
-    mix:[.43,.16,.20,.15,.06], tournaments:12, videoSessions:27,
+    mix:[.43,.16,.20,.15,.06], tournaments:12, notesLogged:11, videoSessions:27,
     prev:{hours:588, sessions:150, tournaments:11, matches:41},
     gpa:3.5, fitness:84, fitnessStart:76, mental:78, status:"warning", statusLabel:"Placement pending",
     focus:"Three D1 conversations open, none closed. Needs one strong fall result.",
@@ -467,7 +476,7 @@ const PLAYERS=[
     utr:[5.8,5.9,6.0,6.1,6.3,6.4,6.5,6.6,6.7,6.8,6.9,6.9],
     skillsStart:[3.5,5.0,4.0,4.0,3.0,5.0], skillsNow:[5.0,6.5,5.5,5.5,4.5,6.5],
     wins:18, losses:11, vsHigher:5, hours:462, sessions:142, scheduled:148,
-    mix:[.55,.11,.14,.14,.06], tournaments:6, videoSessions:14,
+    mix:[.55,.11,.14,.14,.06], tournaments:6, notesLogged:16, videoSessions:14,
     prev:{hours:401, sessions:124, tournaments:4, matches:21},
     gpa:4.0, fitness:70, fitnessStart:58, mental:74, status:"good", statusLabel:"On track",
     focus:"Fundamentals and load management. Deliberately capped training hours at this age.",
@@ -479,7 +488,7 @@ const PLAYERS=[
     utr:[9.2,9.3,9.4,9.4,9.3,9.2,9.1,9.1,9.1,9.1,9.1,9.1],
     skillsStart:[6.5,7.0,6.0,6.5,5.0,6.5], skillsNow:[6.5,7.0,6.5,6.5,5.5,6.0],
     wins:14, losses:13, vsHigher:4, hours:388, sessions:96, scheduled:160,
-    mix:[.34,.14,.12,.33,.07], tournaments:5, videoSessions:19,
+    mix:[.34,.14,.12,.33,.07], tournaments:5, notesLogged:12, videoSessions:19,
     prev:{hours:566, sessions:146, tournaments:10, matches:38},
     gpa:3.6, fitness:58, fitnessStart:72, mental:69, status:"serious", statusLabel:"Return from injury",
     focus:"Week 6 of a 10-week wrist rehab. Modified sessions only.",
@@ -734,6 +743,44 @@ function retentionTable(){
       <td class="num">${badge(band(x.ret), x.ret+"%")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
+/* Why a player is flagged, derived from their own numbers rather than
+   from a coach's prose — short, checkable, and safe to show to staff. */
+function flatMonths(p){
+  const last = p.utr[p.utr.length-1];
+  for (let i = p.utr.length - 2; i >= 0; i--)
+    if (Math.abs(p.utr[i] - last) > 0.15) return p.utr.length - 1 - i;
+  return p.utr.length - 1;
+}
+function flagFacts(p){
+  const f = [], att = attendance(p), d = utrDelta(p), fm = flatMonths(p);
+  if (att < 90)                     f.push(`Attendance ${att}%`);
+  if (d < -0.05)                    f.push(`UTR down ${Math.abs(d).toFixed(1)} this year`);
+  else if (Math.abs(d) <= UTR_FLAT && fm >= 6) f.push(`UTR flat ${fm} months`);
+  if (p.prev.hours && p.hours < p.prev.hours)
+    f.push(`Hours down ${p.prev.hours - p.hours} on last year`);
+  if (p.fitness < p.fitnessStart)   f.push(`Fitness down ${p.fitnessStart - p.fitness}`);
+  if (p.grade === 12 && p.status !== "good") f.push("Senior — not yet committed");
+  if (!f.length)                    f.push(`Flagged by ${esc(p.coach)}`);
+  return f.slice(0, 4);
+}
+
+/* Per-coach roll-up. Deliberately NOT a ranking: caseloads differ, and the
+   context columns are there so gains are never read in isolation. */
+function coachStats(){
+  const by = {};
+  PLAYERS.forEach(p=>{
+    const c = (by[p.coach] ||= {coach:p.coach, n:0, hours:0, gain:0, att:0, grade:0, startUtr:0, notes:0});
+    c.n++; c.hours += p.hours; c.gain += utrDelta(p); c.att += attendance(p);
+    c.grade += p.grade; c.startUtr += p.utr[0]; c.notes += p.notesLogged;
+  });
+  return Object.values(by).map(c=>({
+    ...c,
+    avgGain: c.gain / c.n, avgAtt: Math.round(c.att / c.n),
+    avgGrade: c.grade / c.n, avgStart: c.startUtr / c.n,
+    notesPer: c.notes / c.n
+  })).sort((a,b)=> b.n - a.n);
+}
+
 function ring(pct,size=36){
   const r=(size-5)/2, c=2*Math.PI*r;
   const col=pct>=75?"var(--good)":pct>=45?"var(--series-1)":pct>=25?"var(--warning)":"var(--critical)";
@@ -950,17 +997,12 @@ function adminView(){
       <div class="ttile"><div class="v">${n}</div><div class="t">Players in this sample</div></div>
     </div></div>
 
-  <div class="callout" style="border-left-color:var(--critical);background:rgba(208,59,59,.09)">
-    <b>Why this page exists.</b> At $68,600 per boarding place, one retained family is worth more than this entire
-    system costs to run. Below is the early-warning list — the students whose numbers changed before anyone said
-    anything out loud.</div>
-
   <div class="grid g-58">
     <div class="card"><h2><span class="accentbar"></span>Needs attention</h2>
-      <p class="sub">Ranked by severity, from attendance, rating movement and coach input.</p>
+      <p class="sub">Ranked by severity. Each flag states the numbers that triggered it.</p>
       ${alerts.map(p=>`<div class="goal"><div class="mini" style="width:36px;height:36px">${initials(p)}</div>
         <div class="g-body"><h4>${esc(p.first)} ${esc(p.last)} ${badge(p.status,p.statusLabel)}</h4>
-        <p>${esc(p.notes[0]?p.notes[0].t.slice(0,150)+"…":"")}</p></div></div>`).join("")}</div>
+        <div class="facts">${flagFacts(p).map(f=>`<span class="fact">${f}</span>`).join("")}</div></div></div>`).join("")}</div>
     <div class="card"><h2><span class="accentbar"></span>UTR movement · year to date</h2>
       <p class="sub">The academy's actual product, one dot per player.</p>
       ${movementChart()}</div>
@@ -989,6 +1031,29 @@ function adminView(){
       60% and 85% retention across that group is roughly
       <b>$${(Math.round((0.85-0.60)*11)*TUITION).toLocaleString()}</b> a year. That is a recruiting, language-support
       or agent-quality question, and right now nothing in the operation surfaces it.</div>
+  </div>
+
+  <div class="card"><h2><span class="accentbar"></span>Coaching staff <span class="only">Director only</span></h2>
+    <p class="sub">Caseload, hours delivered and how consistently each coach is keeping records.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Coach</th><th class="num">Players</th><th class="num">Hours delivered</th>
+        <th class="num">Notes logged</th><th class="num">Avg attendance</th>
+        <th class="num">Avg grade</th><th class="num">Avg starting UTR</th><th class="num">Avg UTR gain</th></tr></thead>
+      <tbody>${coachStats().map(c=>`<tr>
+        <td style="font-weight:600">${esc(c.coach)}</td>
+        <td class="num">${c.n}</td>
+        <td class="num">${c.hours.toLocaleString()}</td>
+        <td class="num">${c.notes} <span style="color:var(--muted)">(${c.notesPer.toFixed(1)}/player)</span></td>
+        <td class="num">${c.avgAtt}%</td>
+        <td class="num" style="color:var(--muted)">${c.avgGrade.toFixed(1)}</td>
+        <td class="num" style="color:var(--muted)">${c.avgStart.toFixed(1)}</td>
+        <td class="num">${chip(+c.avgGain.toFixed(2),{flatBand:UTR_FLAT,dp:2})}</td></tr>`).join("")}</tbody>
+    </table></div>
+    <div class="callout" style="margin:15px 0 0">
+      <b>Read the last column with the two before it.</b> Rating gain is not comparable across caseloads.
+      Players starting lower and younger gain UTR faster, so a coach given the 8th and 9th graders will always
+      look stronger than one carrying a senior, an injury and a plateau. The columns this page is actually
+      reliable for are caseload, hours and whether records are being kept.</div>
   </div>
 
   <div class="card"><h2><span class="accentbar"></span>Full roster</h2>
